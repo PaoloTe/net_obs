@@ -9,9 +9,9 @@
 The primary goal of this script is to **isolate and quantify latency overhead** introduced by the software stack. By capturing timestamps at three distinct levels, **Net Obs** aims to:
 
 1.  **Measure Processing Delay:** Determine exactly how much latency is added by the OS kernel and the Python interpreter compared to the raw network transmission.
-2.  **Benchmark Performance:** Provide reliable throughput and jitter metrics for containerized environments.
+2.  **Benchmark Performance:** Provide reliable throughput and jitter metrics.
 3.  **Identify Bottlenecks:** Distinguish between actual network issues  and application performance issues.
-4.  **Measure the network speed:** Using `iperf3`  to measure the download and the upload speed.
+
 
 ---
 
