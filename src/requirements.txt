@@ -1,1 +1,10 @@
-mysql-connector-python==9.1.0
+# --- Network Analysis & Sniffing ---
+scapy>=2.5.0              # Per inviare e manipolare pacchetti (RTT_Client)
+pyshark>=0.6              # Wrapper Python per TShark/Wireshark (RTT_Client)
+
+# --- Database ---
+mysql-connector-python>=8.0   # Per connettersi e scrivere su MySQL/MariaDB
+
+# --- Utilities ---
+requests>=2.28.0          # Per ottenere l'IP pubblico (api64.ipify.org)
+

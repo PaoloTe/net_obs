@@ -1,32 +1,27 @@
-# Byte-compiled / optimized / DLL files
+# --- Python Core ---
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
+*.so
+*.dll
 *.pyd
-*.db
-*.sqlite3
-*.egg-info/
-*.egg
 
-# Virtual environments
+# --- Virtual Environments ---
 env/
 venv/
 ENV/
 .venv/
 *.env
 *.venv
+.python-version
 
+# --- Packages & Dependency Managers ---
 # Pipenv
 Pipfile
 Pipfile.lock
-
 # Poetry
 poetry.lock
-
-# pyenv
-.python-version
-
-# Distribution / packaging
+# Distribution / Packaging
 build/
 develop-eggs/
 dist/
@@ -37,11 +32,17 @@ dist/
 *.manifest
 *.spec
 
-# Installer logs
+# --- Logs & Debug ---
+*.log
 pip-log.txt
 pip-delete-this-directory.txt
+*.tmp
+*.bak
+*.swp
+*.swo
+*.orig
 
-# Unit test / coverage reports
+# --- Testing & Coverage ---
 htmlcov/
 .tox/
 .nox/
@@ -52,52 +53,40 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
-
-# Pytest cache
 .pytest_cache/
-
-# MyPy cache
 .mypy_cache/
 
-# IDEs and editors
-.vscode/
+# --- IDEs (PyCharm & VSCode) ---
 .idea/
+.vscode/
 *.iml
 *.ipr
 *.iws
-
-# PyCharm specific files
-.idea/
-*.ipr
-*.iws
 out/
-
-# Jupyter Notebook
 .ipynb_checkpoints
 
-# macOS specific files
+# --- Project Specific: Network Analysis ---
+# Ignora i file di cattura generati da Scapy/Wireshark/Tcpdump
+*.pcap
+*.pcapng
+*.cap
+
+# --- OS Specific ---
 .DS_Store
+Thumbs.db
 
-# Logs and databases
-*.log
-*.csv
-*.sqlite
-
-# Temporary files
-*.tmp
-*.bak
-*.swp
-*.swo
-*.orig
-
-# Docker
+# --- Docker ---
 *.dockerignore
 docker-compose.override.yml
 
-# Environment variables
+# --- Secrets & Environment Variables ---
 .env
 .env.*
-
-# Ignore secrets
+!.env.example
 secrets.json
 secrets.*.json
+
+# --- Database (Local/Temp) ---
+*.db
+*.sqlite3
+*.sqlite

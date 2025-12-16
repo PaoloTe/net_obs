@@ -1,24 +1,72 @@
-# net_obs
+#  Net Obs - Network Performance Analysis
 
-This project sets up two Ubuntu containers connected to a custom Docker network (`myDockerNet`). Each container has the necessary tools for network testing and diagnostics, including:
-
-- `iperf3` for network performance testing
-- `ping`, `dnsutils`, and `curl` for connectivity testing
-- `ip`, `route`, and `ifconfig` for network configuration management
+**Net Obs** is a containerized Client-Server framework designed to analyze network performance with high granularity. It goes beyond standard speed tests by comparing **Round-Trip Time (RTT)** across multiple layers of the networking stack (Application vs. Kernel vs. Wire) and logging detailed metrics into a persistent MySQL database.
 
 ---
 
-## Prerequisites
+##  System Architecture
 
-Make sure you have the following installed on your system:
+The project runs on a **Dockerized** environment with the following components:
 
-- **Docker**: [Install Docker](https://docs.docker.com/get-docker/)
-- **Docker Compose**: [Install Docker Compose](https://docs.docker.com/compose/install/)
+1.  **Client Container**: Runs Python automation scripts (`Main.py`, `RTT_Client.py`). It is equipped with `tshark`, `scapy`, and `iperf3` for traffic generation and packet sniffing.
+2.  **Server Container**: Acts as the target endpoint. It runs `iperf3` servers in the background and listens for UDP echo requests.
+3.  **Database**: A **MySQL 8.0** instance stores all performance metrics (`network_performance` DB).
+4.  **Visualization**: **Grafana** and **PhpMyAdmin** are included for data analysis and management.
 
 ---
 
-## Run
+##  Project Modules
 
+### 1. General Network Conditions (`Main.py`)
+A "sanity check" script that evaluates the overall link quality.
+* **Throughput**: Measures UDP/TCP Upload and Download speeds using `iperf3` (JSON output analysis).
+* **Latency**: Measures basic ICMP latency and Jitter using system `ping`.
+* **Connectivity**: Detects **Public IP** (via `ipify` API) and **Private IP** (via DNS socket).
+* **Storage**: Logs results to the `udp_metrics` table.
+
+### 2. Multi-Layer RTT Analysis (`RTT_Client.py` / `RTT_Server.py`)
+This is the core research module. It sends numbered UDP packets and attempts to measure RTT from **three simultaneous viewpoints** to isolate OS/Driver overhead:
+
+1.  **Socket Level (App Layer)**:
+    * Uses standard Python `time.time()` before send and after receive.
+    * *Includes Python interpreter overhead and OS buffering.*
+2.  **Scapy Sniffer (Kernel/Driver Layer)**:
+    * Uses a background thread to sniff packets via `AF_PACKET`.
+    * Matches packet payloads to calculate timestamps closer to the kernel.
+3.  **PyShark Sniffer (Wire Layer)**:
+    * Wraps `tshark` (Wireshark CLI) to capture packets directly from the interface.
+    * Provides the highest fidelity timestamps (`sniff_timestamp`).
+
+---
+
+##  Prerequisites & Installation
+
+### Option A: Docker (Recommended)
+This ensures all dependencies (`tshark`, `scapy`, privileges) are handled automatically.
+
+1.  **Clone/Copy** the project files into a folder.
+2.  **Start the environment**:
+    ```bash
+    docker compose up --build
+    ```
+    * This builds the `ubuntu:22.04` image, installs Wireshark/Python dependencies, and starts the DB.
+    * The `server` container automatically starts `iperf3` listeners on ports 5092/5093.
+
+### Option B: Local Execution (Linux)
+If running outside Docker, you need:
+* Python 3.8+
+* System tools: `iperf3`, `tshark`, `ping`.
+* Python libs:
+    ```bash
+    pip install mysql-connector-python scapy pyshark requests numpy
+    ```
+
+---
+
+## 🚀 Usage Guide
+
+All commands should be run inside the **Client** container.
+
+**1. Access the Client Shell**
 ```bash
-docker compose up --build --force-recreate
-```
+docker exec -it client /bin/bash
