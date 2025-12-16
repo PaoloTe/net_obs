@@ -76,7 +76,7 @@ If running outside Docker, you need:
 
 ###  Usage Guide
 
-All commands should be run inside the **Client** and **Server** container .
+All commands should be run inside the **Client** and **Server** container:
 
 **1. Access the Client Shell**
 ```bash
