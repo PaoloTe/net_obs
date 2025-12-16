@@ -97,5 +97,5 @@ pyton3 RTT.Server.py
 
 **5. Run RTT.Client.py in the Client Shell**
 ```bash
-pyton3 RTT.Cleint.py
+pyton3 RTT.Client.py
 ```
