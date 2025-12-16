@@ -1,6 +1,17 @@
-#  Net Obs - Network Performance Analysis
+# Net Obs - Network Performance Analysis
 
 **Net Obs** is a containerized Client-Server framework designed to analyze network performance with high granularity. It goes beyond standard speed tests by comparing **Round-Trip Time (RTT)** across multiple layers of the networking stack (Application vs. Kernel vs. Wire) and logging detailed metrics into a persistent MySQL database.
+
+---
+
+##  Project Objectives
+
+The primary goal of this script is to **isolate and quantify latency overhead** introduced by the software stack. By capturing timestamps at three distinct levels, **Net Obs** aims to:
+
+1.  **Measure Processing Delay:** Determine exactly how much latency is added by the OS kernel and the Python interpreter compared to the raw network transmission.
+2.  **Benchmark Performance:** Provide reliable throughput and jitter metrics for containerized environments.
+3.  **Identify Bottlenecks:** Distinguish between actual network issues  and application performance issues.
+4.  **Measure the network speed:** Using `iperf3`  to measure the download and the upload speed.
 
 ---
 
@@ -19,7 +30,7 @@ The project runs on a **Dockerized** environment with the following components:
 
 ### 1. General Network Conditions (`Main.py`)
 A "sanity check" script that evaluates the overall link quality.
-* **Throughput**: Measures UDP/TCP Upload and Download speeds using `iperf3` (JSON output analysis).
+* **Throughput**: Measures Upload and Download speeds using `iperf3` (JSON output analysis).
 * **Latency**: Measures basic ICMP latency and Jitter using system `ping`.
 * **Connectivity**: Detects **Public IP** (via `ipify` API) and **Private IP** (via DNS socket).
 * **Storage**: Logs results to the `udp_metrics` table.
@@ -63,10 +74,28 @@ If running outside Docker, you need:
 
 ---
 
-## 🚀 Usage Guide
+###  Usage Guide
 
-All commands should be run inside the **Client** container.
+All commands should be run inside the **Client** and **Server** container .
 
 **1. Access the Client Shell**
 ```bash
-docker exec -it client /bin/bash
+docker exec -it client bash
+```
+**2. Access the Server Shell**
+```bash
+docker exec -it server bash
+```
+**3. Run Main.py in the Client Shell**
+```bash
+pyton3 Main.py
+```
+**4. Run RTT.Server.py in the Server Shell**
+```bash
+pyton3 RTT.Server.py
+```
+
+**5. Run RTT.Client.py in the Client Shell**
+```bash
+pyton3 RTT.Cleint.py
+```
